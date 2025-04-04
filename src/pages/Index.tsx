@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ActivationForm from '@/components/ActivationForm';
 import AviatorAnimation from '@/components/AviatorAnimation';
 import PredictionPanel from '@/components/PredictionPanel';
@@ -13,6 +13,18 @@ const Index = () => {
   const [predictedMultiplier, setPredictedMultiplier] = useState(0);
   const [betwayId, setBetwayId] = useState('');
   const [deepseekApiKey, setDeepseekApiKey] = useState('');
+  
+  // Check for environment variables on component mount
+  useEffect(() => {
+    const envBetwayId = process.env.BETWAY_ID;
+    const envDeepseekKey = process.env.DEEPSEEK_API_KEY;
+    
+    if (envBetwayId && envDeepseekKey) {
+      setBetwayId(envBetwayId);
+      setDeepseekApiKey(envDeepseekKey);
+      setIsActivated(true);
+    }
+  }, []);
 
   const handleActivate = (betwayId: string, deepseekApiKey: string) => {
     setBetwayId(betwayId);

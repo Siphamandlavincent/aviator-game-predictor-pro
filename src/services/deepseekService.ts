@@ -10,15 +10,26 @@ class DeepSeekService {
   private apiKey: string;
   private betwayId: string;
   
-  constructor(apiKey: string, betwayId: string) {
-    this.apiKey = apiKey;
-    this.betwayId = betwayId;
+  constructor(apiKey?: string, betwayId?: string) {
+    this.apiKey = apiKey || process.env.DEEPSEEK_API_KEY || "";
+    this.betwayId = betwayId || process.env.BETWAY_ID || "";
     console.log("DeepSeek Service initialized with Betway ID:", this.betwayId);
   }
 
   async getPrediction(): Promise<DeepSeekResponse | null> {
     try {
+      if (!this.apiKey) {
+        throw new Error("DeepSeek API key is not provided");
+      }
+
+      if (!this.betwayId) {
+        throw new Error("Betway ID is not provided");
+      }
+
       console.log(`Fetching prediction using DeepSeek API for Betway ID: ${this.betwayId}`);
+      
+      // In the future, replace this with actual API call to DeepSeek
+      // For now, we'll keep the simulation logic
       
       // Simulate API call with a delay
       await new Promise(resolve => setTimeout(resolve, 1000));

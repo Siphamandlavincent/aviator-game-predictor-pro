@@ -9,8 +9,8 @@ import DeepSeekService from '@/services/deepseekService';
 interface PredictionPanelProps {
   onStartFlight: (multiplier: number) => void;
   isFlying: boolean;
-  betwayId: string;
-  deepseekApiKey: string;
+  betwayId?: string;
+  deepseekApiKey?: string;
 }
 
 const PredictionPanel = ({ onStartFlight, isFlying, betwayId, deepseekApiKey }: PredictionPanelProps) => {
@@ -21,9 +21,13 @@ const PredictionPanel = ({ onStartFlight, isFlying, betwayId, deepseekApiKey }: 
   const [deepseekService, setDeepseekService] = useState<DeepSeekService | null>(null);
 
   useEffect(() => {
-    if (betwayId && deepseekApiKey) {
-      console.log("Creating DeepSeek service with Betway ID:", betwayId);
-      const service = new DeepSeekService(deepseekApiKey, betwayId);
+    // Use provided props or fallback to environment variables
+    const apiKey = deepseekApiKey || process.env.DEEPSEEK_API_KEY;
+    const betId = betwayId || process.env.BETWAY_ID;
+    
+    if (apiKey || betId) {
+      console.log("Creating DeepSeek service with Betway ID:", betId);
+      const service = new DeepSeekService(apiKey, betId);
       setDeepseekService(service);
     }
   }, [betwayId, deepseekApiKey]);
