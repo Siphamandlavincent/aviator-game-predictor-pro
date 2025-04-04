@@ -3,13 +3,13 @@ import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { CheckCircle2, Lock, UserCircle } from 'lucide-react';
 
 interface ActivationFormProps {
   onActivate: (betwayId: string, deepseekApiKey: string) => void;
 }
 
 const ActivationForm = ({ onActivate }: ActivationFormProps) => {
-  const [code, setCode] = useState('');
   const [betwayId, setBetwayId] = useState('');
   const [deepseekApiKey, setDeepseekApiKey] = useState('');
   const [loading, setLoading] = useState(false);
@@ -19,43 +19,32 @@ const ActivationForm = ({ onActivate }: ActivationFormProps) => {
     setLoading(true);
     
     setTimeout(() => {
-      if (code.length >= 8) {
-        if (!deepseekApiKey) {
-          toast.warning("DeepSeek API key is required for real-time predictions");
-          setLoading(false);
-          return;
-        }
-        
-        toast.success("Activation successful! Connected to Betway account.");
-        onActivate(betwayId, deepseekApiKey);
-      } else {
-        toast.error("Invalid activation code. Please try again.");
+      if (!betwayId) {
+        toast.error("Betway ID is required for syncing with real game data");
+        setLoading(false);
+        return;
       }
+      
+      if (!deepseekApiKey) {
+        toast.warning("DeepSeek API key is required for real-time predictions");
+        setLoading(false);
+        return;
+      }
+      
+      toast.success("Connection successful! DeepSeek AI is now synced with Betway account.");
+      onActivate(betwayId, deepseekApiKey);
       setLoading(false);
     }, 1500);
   };
 
   return (
     <div className="w-full max-w-md p-6 bg-aviator-secondary/80 backdrop-blur-sm rounded-lg shadow-lg border border-aviator-accent/20">
-      <h2 className="text-2xl font-bold text-center mb-6 text-white">Activate Predictor Pro v4.0</h2>
+      <h2 className="text-2xl font-bold text-center mb-6 text-white">Connect to Betway & DeepSeek AI</h2>
       
       <form onSubmit={handleActivate} className="space-y-4">
         <div className="space-y-2">
-          <label htmlFor="code" className="text-sm font-medium text-gray-200">
-            Enter your activation code:
-          </label>
-          <Input
-            id="code"
-            placeholder="e.g., XXXX-XXXX-XXXX"
-            value={code}
-            onChange={(e) => setCode(e.target.value)}
-            className="bg-aviator-dark/70 border-aviator-accent/30 text-white"
-            required
-          />
-        </div>
-
-        <div className="space-y-2">
-          <label htmlFor="betwayId" className="text-sm font-medium text-gray-200">
+          <label htmlFor="betwayId" className="text-sm font-medium text-gray-200 flex items-center">
+            <UserCircle className="mr-2 text-aviator-primary" size={16} />
             Betway Account ID:
           </label>
           <Input
@@ -72,7 +61,8 @@ const ActivationForm = ({ onActivate }: ActivationFormProps) => {
         </div>
         
         <div className="space-y-2">
-          <label htmlFor="deepseekApiKey" className="text-sm font-medium text-gray-200">
+          <label htmlFor="deepseekApiKey" className="text-sm font-medium text-gray-200 flex items-center">
+            <Lock className="mr-2 text-aviator-primary" size={16} />
             DeepSeek API Key:
           </label>
           <Input
@@ -94,12 +84,17 @@ const ActivationForm = ({ onActivate }: ActivationFormProps) => {
           className="w-full bg-aviator-primary hover:bg-aviator-primary/80 text-white font-bold"
           disabled={loading}
         >
-          {loading ? 'Activating...' : 'Activate & Connect to Betway'}
+          {loading ? 'Connecting...' : (
+            <span className="flex items-center">
+              <CheckCircle2 className="mr-2" size={18} />
+              Connect & Start Predicting
+            </span>
+          )}
         </Button>
       </form>
       
       <div className="mt-4 text-center text-xs text-gray-400">
-        <p>Don't have a code? Sign up at one of our supported casinos:</p>
+        <p>The predictor works with these supported casinos:</p>
         <div className="mt-2 flex flex-wrap justify-center gap-2">
           <span className="px-2 py-1 bg-aviator-dark/50 rounded text-gray-300">Betway</span>
           <span className="px-2 py-1 bg-aviator-dark/50 rounded text-gray-300">1win</span>

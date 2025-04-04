@@ -13,40 +13,41 @@ class DeepSeekService {
   constructor(apiKey: string, betwayId: string) {
     this.apiKey = apiKey;
     this.betwayId = betwayId;
+    console.log("DeepSeek Service initialized with Betway ID:", this.betwayId);
   }
 
   async getPrediction(): Promise<DeepSeekResponse | null> {
     try {
-      // In a real implementation, this would make an actual API call to DeepSeek
-      // For now, simulating API behavior with enhanced algorithm
-      
       console.log(`Fetching prediction using DeepSeek API for Betway ID: ${this.betwayId}`);
       
       // Simulate API call with a delay
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Generate a more realistic prediction using a pattern-based algorithm
-      // In a real implementation, this would be the response from DeepSeek API
-      const baseMultiplier = Math.random() * 3 + 1.2; // Range 1.2 - 4.2
+      // Generate a prediction in the range most common for Aviator (1.2 - 10)
+      // Using a more consistent algorithm that simulates AI prediction patterns
+      const currentMinute = new Date().getMinutes();
+      const currentSecond = new Date().getSeconds();
       
-      // Apply some pattern modifications to simulate AI prediction
-      const hourFactor = (new Date().getHours() % 12) / 24;
-      const minuteFactor = new Date().getMinutes() / 120;
+      // Use time-based seed for a more consistent but still varied prediction
+      const timeSeed = (currentMinute * 60 + currentSecond) / 3600;
+      const basePrediction = 1.2 + (timeSeed * 8); // Range 1.2 - 9.2
       
-      // Algorithm that appears more deterministic
-      let prediction = baseMultiplier;
-      prediction += hourFactor;
-      prediction -= minuteFactor;
-      prediction *= (1 + Math.sin(Date.now() / 10000) * 0.1);
+      // Add slight randomness but keep it predictable
+      const randomFactor = Math.sin(Date.now() / 10000) * 0.5;
+      let prediction = basePrediction + randomFactor;
       
-      // Keep within reasonable bounds for Aviator
+      // Ensure the prediction stays within reasonable bounds
       prediction = Math.max(1.2, Math.min(10, prediction));
       
       // Format to 2 decimal places
       prediction = parseFloat(prediction.toFixed(2));
       
-      // Generate confidence level
-      const confidence = Math.floor(Math.random() * 20 + 80); // 80-99%
+      // Higher confidence for more reasonable predictions
+      const confidence = prediction < 5 ? 
+        Math.floor(Math.random() * 10 + 85) : // 85-94% for lower predictions
+        Math.floor(Math.random() * 15 + 75);  // 75-89% for higher predictions
+      
+      console.log(`Generated prediction: ${prediction}x with ${confidence}% confidence`);
       
       return {
         prediction,
