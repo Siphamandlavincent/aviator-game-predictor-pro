@@ -5,23 +5,29 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 
 interface ActivationFormProps {
-  onActivate: () => void;
+  onActivate: (betwayId: string, deepseekApiKey: string) => void;
 }
 
 const ActivationForm = ({ onActivate }: ActivationFormProps) => {
   const [code, setCode] = useState('');
   const [betwayId, setBetwayId] = useState('');
+  const [deepseekApiKey, setDeepseekApiKey] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleActivate = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     
-    // Direct activation without logging
     setTimeout(() => {
       if (code.length >= 8) {
+        if (!deepseekApiKey) {
+          toast.warning("DeepSeek API key is required for real-time predictions");
+          setLoading(false);
+          return;
+        }
+        
         toast.success("Activation successful! Connected to Betway account.");
-        onActivate();
+        onActivate(betwayId, deepseekApiKey);
       } else {
         toast.error("Invalid activation code. Please try again.");
       }
@@ -50,7 +56,7 @@ const ActivationForm = ({ onActivate }: ActivationFormProps) => {
 
         <div className="space-y-2">
           <label htmlFor="betwayId" className="text-sm font-medium text-gray-200">
-            Betway Account ID (optional):
+            Betway Account ID:
           </label>
           <Input
             id="betwayId"
@@ -58,9 +64,28 @@ const ActivationForm = ({ onActivate }: ActivationFormProps) => {
             value={betwayId}
             onChange={(e) => setBetwayId(e.target.value)}
             className="bg-aviator-dark/70 border-aviator-accent/30 text-white"
+            required
           />
           <p className="text-xs text-gray-400">
-            Syncing with your Betway account enables real-time predictions with DeepSeek AI
+            Your Betway ID is required to sync with live game data
+          </p>
+        </div>
+        
+        <div className="space-y-2">
+          <label htmlFor="deepseekApiKey" className="text-sm font-medium text-gray-200">
+            DeepSeek API Key:
+          </label>
+          <Input
+            id="deepseekApiKey"
+            type="password"
+            placeholder="Enter your DeepSeek API key"
+            value={deepseekApiKey}
+            onChange={(e) => setDeepseekApiKey(e.target.value)}
+            className="bg-aviator-dark/70 border-aviator-accent/30 text-white"
+            required
+          />
+          <p className="text-xs text-gray-400">
+            Your DeepSeek API key is needed for AI-powered predictions
           </p>
         </div>
         

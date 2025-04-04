@@ -11,8 +11,12 @@ const Index = () => {
   const [isActivated, setIsActivated] = useState(false);
   const [isFlying, setIsFlying] = useState(false);
   const [predictedMultiplier, setPredictedMultiplier] = useState(0);
+  const [betwayId, setBetwayId] = useState('');
+  const [deepseekApiKey, setDeepseekApiKey] = useState('');
 
-  const handleActivate = () => {
+  const handleActivate = (betwayId: string, deepseekApiKey: string) => {
+    setBetwayId(betwayId);
+    setDeepseekApiKey(deepseekApiKey);
     setIsActivated(true);
   };
 
@@ -92,6 +96,8 @@ const Index = () => {
           <PredictionPanel 
             onStartFlight={handleStartFlight}
             isFlying={isFlying}
+            betwayId={betwayId}
+            deepseekApiKey={deepseekApiKey}
           />
           
           <BettingControls 
