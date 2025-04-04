@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,13 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				aviator: {
+					primary: '#FF3A4D',
+					secondary: '#1E293B',
+					accent: '#0EA5E9',
+					dark: '#0F172A',
+					light: '#F8FAFC'
 				}
 			},
 			borderRadius: {
@@ -84,11 +92,26 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'plane-fly': {
+					'0%': { transform: 'translate(0, 0) scale(1)', opacity: '1' },
+					'100%': { transform: 'translate(150px, -150px) scale(0.5)', opacity: '0' }
+				},
+				'fade-in': {
+					'0%': { opacity: '0' },
+					'100%': { opacity: '1' }
+				},
+				'pulse-scale': {
+					'0%, 100%': { transform: 'scale(1)' },
+					'50%': { transform: 'scale(1.05)' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'plane-fly': 'plane-fly 3s ease-out forwards',
+				'fade-in': 'fade-in 0.5s ease-out',
+				'pulse-scale': 'pulse-scale 2s infinite'
 			}
 		}
 	},
